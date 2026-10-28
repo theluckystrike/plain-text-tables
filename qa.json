@@ -1,0 +1,67 @@
+[
+	{
+		"feature": "table-drawn",
+		"caption": "Without the cursor in a table, Obsidian draws each table as usual.",
+		"note": "Reading list.md",
+		"eval": "(async () => { document.querySelectorAll('.modal-container').forEach(el => el.remove()); const l=app.workspace.getLeaf(false); const s=l.getViewState(); await l.setViewState({...s,state:{...s.state,mode:'source',source:false}}); const e=l.view.editor; e.setCursor({line:0,ch:0}); await new Promise(r=>setTimeout(r,400)); for (let i=0;i<50 && document.querySelectorAll('.workspace-leaf.mod-active .cm-table-widget').length<2;i++) await new Promise(r=>setTimeout(r,100)); const w=document.querySelectorAll('.workspace-leaf.mod-active .cm-table-widget').length; if (w<2) throw new Error('widgets: '+w); return w; })()",
+		"wait": 700,
+		"zoom": 1.2
+	},
+	{
+		"feature": "table-text",
+		"caption": "With the cursor in the first table, that table shows as Markdown text. The second table stays drawn.",
+		"note": "Reading list.md",
+		"eval": "(async () => { document.querySelectorAll('.modal-container').forEach(el => el.remove()); const l=app.workspace.getLeaf(false); const s=l.getViewState(); await l.setViewState({...s,state:{...s.state,mode:'source',source:false}}); const e=l.view.editor; e.focus(); e.setCursor({line:0,ch:0}); await new Promise(r=>setTimeout(r,400)); e.setCursor({line:7,ch:10}); for (let i=0;i<50 && document.querySelectorAll('.workspace-leaf.mod-active .cm-line.ptt-text-line').length<5;i++) await new Promise(r=>setTimeout(r,100)); const n=document.querySelectorAll('.workspace-leaf.mod-active .cm-line.ptt-text-line').length; if (n<5) throw new Error('text lines: '+n); return n; })()",
+		"after": "(async () => { app.workspace.activeEditor.editor.setCursor({line:0,ch:0}); return 'ok'; })()",
+		"wait": 700,
+		"zoom": 1.2
+	},
+	{
+		"feature": "plain-text-tables",
+		"caption": "The cursor moves into the table, the text shows, and the table is drawn again when the cursor leaves.",
+		"frames": [
+			{
+				"note": "Reading list.md",
+				"eval": "(async () => { document.querySelectorAll('.modal-container').forEach(el => el.remove()); const l=app.workspace.getLeaf(false); const s=l.getViewState(); await l.setViewState({...s,state:{...s.state,mode:'source',source:false}}); const e=l.view.editor; e.focus(); e.setCursor({line:2,ch:0}); await new Promise(r=>setTimeout(r,400)); for (let i=0;i<50 && document.querySelectorAll('.workspace-leaf.mod-active .cm-table-widget').length<2;i++) await new Promise(r=>setTimeout(r,100)); const w=document.querySelectorAll('.workspace-leaf.mod-active .cm-table-widget').length; if (w<2) throw new Error('widgets: '+w); return 'drawn'; })()",
+				"wait": 500,
+				"hold": 1800,
+				"zoom": 1.2
+			},
+			{
+				"eval": "(async () => { const e=app.workspace.activeEditor.editor; e.setCursor({line:6,ch:18}); for (let i=0;i<50 && document.querySelectorAll('.workspace-leaf.mod-active .cm-line.ptt-text-line').length<5;i++) await new Promise(r=>setTimeout(r,100)); const n=document.querySelectorAll('.workspace-leaf.mod-active .cm-line.ptt-text-line').length; if (n<5) throw new Error('text lines: '+n); return 'text'; })()",
+				"wait": 400,
+				"hold": 1800,
+				"zoom": 1.2
+			},
+			{
+				"eval": "(async () => { const e=app.workspace.activeEditor.editor; e.replaceRange(' (2nd)', {line:6,ch:18}); e.setCursor({line:6,ch:24}); await new Promise(r=>setTimeout(r,300)); return e.getLine(6); })()",
+				"wait": 400,
+				"hold": 1800,
+				"zoom": 1.2
+			},
+			{
+				"eval": "(async () => { const e=app.workspace.activeEditor.editor; e.setCursor({line:11,ch:0}); for (let i=0;i<50 && document.querySelectorAll('.workspace-leaf.mod-active .cm-table-widget').length<2;i++) await new Promise(r=>setTimeout(r,100)); const w=document.querySelectorAll('.workspace-leaf.mod-active .cm-table-widget').length; if (w<2) throw new Error('widgets: '+w); return 'drawn'; })()",
+				"after": "(async () => { const e=app.workspace.activeEditor.editor; e.replaceRange('', {line:6,ch:18}, {line:6,ch:24}); return 'ok'; })()",
+				"wait": 400,
+				"hold": 1800,
+				"zoom": 1.2
+			}
+		]
+	},
+	{
+		"feature": "align",
+		"caption": "Pro: after an edit, the columns line up when the cursor leaves the table. Here the cursor is back in the aligned table.",
+		"note": "Budget.md",
+		"eval": "(async () => { document.querySelectorAll('.modal-container').forEach(el => el.remove()); const p=app.plugins.plugins['plain-text-tables']; p.pro.opts.http = async () => ({ status: 200, json: { data: { viewer: { login: 'demo-reader' }, user: { sponsorshipForViewerAsSponsor: { isActive: true, isOneTimePayment: false, tier: { name: '$5 a month', monthlyPriceInCents: 500 } } } } } }); app.secretStorage.setSecret('plain-text-tables-github-token', 'gho_' + '0'.repeat(36)); await p.pro.refreshNow(); p.settings.align=true; p.applySettings(); const l=app.workspace.getLeaf(false); const s=l.getViewState(); await l.setViewState({...s,state:{...s.state,mode:'source',source:false}}); const e=l.view.editor; e.focus(); e.setCursor({line:0,ch:0}); await new Promise(r=>setTimeout(r,400)); e.setCursor({line:5,ch:6}); await new Promise(r=>setTimeout(r,300)); e.replaceRange(' and drinks', {line:5,ch:6}); await new Promise(r=>setTimeout(r,200)); e.setCursor({line:8,ch:0}); for (let i=0;i<30 && !e.getLine(3).startsWith('| :--');i++) await new Promise(r=>setTimeout(r,100)); if (!e.getLine(3).startsWith('| :--')) throw new Error('not aligned: '+e.getLine(3)); e.setCursor({line:4,ch:3}); for (let i=0;i<50 && document.querySelectorAll('.workspace-leaf.mod-active .cm-line.ptt-text-line').length<5;i++) await new Promise(r=>setTimeout(r,100)); const n=document.querySelectorAll('.workspace-leaf.mod-active .cm-line.ptt-text-line').length; if (n<5) throw new Error('text lines: '+n); return e.getValue(); })()",
+		"after": "(async () => { const e=app.workspace.activeEditor.editor; e.setValue('# Monthly costs\\n\\n| Item | Cost |\\n|:-|-:|\\n| Rent | 950 |\\n| Food | 320 |\\n| Travel pass | 64 |\\n\\nEdit a cost, then move the cursor out of the table.\\n'); e.setCursor({line:0,ch:0});  const p=app.plugins.plugins['plain-text-tables']; p.settings.align=false; p.pro.signOut(); p.applySettings(); return 'ok';  })()",
+		"wait": 800,
+		"zoom": 1.2
+	},
+	{
+		"feature": "settings",
+		"caption": "The settings: table text on or off, and the Pro alignment setting.",
+		"eval": "(async () => { app.setting.open(); app.setting.openTabById('plain-text-tables'); await new Promise(r => setTimeout(r, 800)); return 'ok'; })()",
+		"after": "(async () => { app.setting.close(); return 'ok'; })()",
+		"wait": 700
+	}
+]

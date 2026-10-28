@@ -1,0 +1,11 @@
+{
+	"id": "plain-text-tables",
+	"name": "Plain Text Tables",
+	"version": "1.0.0",
+	"minAppVersion": "1.13.4",
+	"description": "Shows a Markdown table as plain text in Live Preview while the cursor is in it, and renders it again when the cursor leaves.",
+	"author": "Michael Lip",
+	"authorUrl": "https://github.com/theluckystrike",
+	"fundingUrl": "https://github.com/sponsors/theluckystrike",
+	"isDesktopOnly": false
+}

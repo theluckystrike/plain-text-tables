@@ -1,0 +1,591 @@
+{
+ "slug": "plain-text-tables",
+ "module": "plain-text-tables/src/tables",
+ "function": "findTable",
+ "note": "Each case names its function in fn. findTable(lines, at) gives the 0-based header and last row lines of the table that holds line at, or null. splitRow(line) gives the cells with offsets. isDelimiterRow(line). cellCursor(line, col) gives the cursor offset for a click on cell col. alignTable(lines) gives the Pro aligned lines. Names that start with A3, A5 or A8 are the acceptance criteria of SPEC.md. Reviewed by hand against each input.",
+ "cases": [
+  {
+   "name": "A5 cursor on the header row finds the table",
+   "fn": "findTable",
+   "args": [
+    [
+     "# Prices",
+     "",
+     "| Item | Price |",
+     "|:-----|------:|",
+     "| Tea | 3 |",
+     "| Cake | 4.50 |",
+     "",
+     "After the table."
+    ],
+    2
+   ],
+   "expected": {
+    "start": 2,
+    "end": 5
+   }
+  },
+  {
+   "name": "A5 cursor on the delimiter row finds the table",
+   "fn": "findTable",
+   "args": [
+    [
+     "# Prices",
+     "",
+     "| Item | Price |",
+     "|:-----|------:|",
+     "| Tea | 3 |",
+     "| Cake | 4.50 |",
+     "",
+     "After the table."
+    ],
+    3
+   ],
+   "expected": {
+    "start": 2,
+    "end": 5
+   }
+  },
+  {
+   "name": "A5 cursor on the last row finds the table",
+   "fn": "findTable",
+   "args": [
+    [
+     "# Prices",
+     "",
+     "| Item | Price |",
+     "|:-----|------:|",
+     "| Tea | 3 |",
+     "| Cake | 4.50 |",
+     "",
+     "After the table."
+    ],
+    5
+   ],
+   "expected": {
+    "start": 2,
+    "end": 5
+   }
+  },
+  {
+   "name": "A5 blank line under the table is not in it",
+   "fn": "findTable",
+   "args": [
+    [
+     "# Prices",
+     "",
+     "| Item | Price |",
+     "|:-----|------:|",
+     "| Tea | 3 |",
+     "| Cake | 4.50 |",
+     "",
+     "After the table."
+    ],
+    6
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 text line is not a table",
+   "fn": "findTable",
+   "args": [
+    [
+     "# Prices",
+     "",
+     "| Item | Price |",
+     "|:-----|------:|",
+     "| Tea | 3 |",
+     "| Cake | 4.50 |",
+     "",
+     "After the table."
+    ],
+    7
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table on the first line of the note",
+   "fn": "findTable",
+   "args": [
+    [
+     "| a | b |",
+     "| --- | --- |",
+     "| 1 | 2 |"
+    ],
+    0
+   ],
+   "expected": {
+    "start": 0,
+    "end": 2
+   }
+  },
+  {
+   "name": "A5 table under a heading with no blank line",
+   "fn": "findTable",
+   "args": [
+    [
+     "## Costs",
+     "| a | b |",
+     "|---|---|",
+     "| 1 | 2 |"
+    ],
+    3
+   ],
+   "expected": {
+    "start": 1,
+    "end": 3
+   }
+  },
+  {
+   "name": "A5 table right under a text line is part of the paragraph",
+   "fn": "findTable",
+   "args": [
+    [
+     "Some text",
+     "| a | b |",
+     "|---|---|"
+    ],
+    1
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 a delimiter row with another cell count still counts, as Obsidian can draw it while you type",
+   "fn": "findTable",
+   "args": [
+    [
+     "| a | b |",
+     "|---|",
+     "| 1 | 2 |"
+    ],
+    0
+   ],
+   "expected": {
+    "start": 0,
+    "end": 2
+   }
+  },
+  {
+   "name": "A5 table in a code fence is not changed",
+   "fn": "findTable",
+   "args": [
+    [
+     "```",
+     "| a | b |",
+     "|---|---|",
+     "```"
+    ],
+    1
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table in a tilde fence is not changed",
+   "fn": "findTable",
+   "args": [
+    [
+     "~~~~md",
+     "| a | b |",
+     "|---|---|",
+     "~~~~"
+    ],
+    2
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table after a closed code fence is found",
+   "fn": "findTable",
+   "args": [
+    [
+     "```",
+     "x",
+     "```",
+     "",
+     "| a | b |",
+     "|---|---|"
+    ],
+    4
+   ],
+   "expected": {
+    "start": 4,
+    "end": 5
+   }
+  },
+  {
+   "name": "A5 table in a quote or callout is not changed",
+   "fn": "findTable",
+   "args": [
+    [
+     "> [!note]",
+     "> | a | b |",
+     "> |---|---|"
+    ],
+    1
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table indented 4 spaces is code",
+   "fn": "findTable",
+   "args": [
+    [
+     "",
+     "    | a | b |",
+     "    |---|---|"
+    ],
+    1
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table indented 2 spaces is a table",
+   "fn": "findTable",
+   "args": [
+    [
+     "",
+     "  | a | b |",
+     "  |---|---|"
+    ],
+    2
+   ],
+   "expected": {
+    "start": 1,
+    "end": 2
+   }
+  },
+  {
+   "name": "A5 table in front matter is not changed",
+   "fn": "findTable",
+   "args": [
+    [
+     "---",
+     "x: | a | b |",
+     "y: |---|---|",
+     "---",
+     "| a |",
+     "|---|"
+    ],
+    1
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table under front matter is found",
+   "fn": "findTable",
+   "args": [
+    [
+     "---",
+     "x: 1",
+     "---",
+     "| a |",
+     "|---|",
+     "| 1 |"
+    ],
+    5
+   ],
+   "expected": {
+    "start": 3,
+    "end": 5
+   }
+  },
+  {
+   "name": "A5 table in a math block is not changed",
+   "fn": "findTable",
+   "args": [
+    [
+     "$$",
+     "| a | b |",
+     "|---|---|",
+     "$$"
+    ],
+    1
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 table without outer pipes",
+   "fn": "findTable",
+   "args": [
+    [
+     "a | b",
+     "--- | ---",
+     "1 | 2"
+    ],
+    2
+   ],
+   "expected": {
+    "start": 0,
+    "end": 2
+   }
+  },
+  {
+   "name": "A5 rows end at a line without a pipe",
+   "fn": "findTable",
+   "args": [
+    [
+     "| a |",
+     "|---|",
+     "| 1 |",
+     "next line",
+     "| 2 |"
+    ],
+    4
+   ],
+   "expected": null
+  },
+  {
+   "name": "A5 two tables split by a blank line are two tables",
+   "fn": "findTable",
+   "args": [
+    [
+     "| a |",
+     "|---|",
+     "| 1 |",
+     "",
+     "| b |",
+     "|---|",
+     "| 2 |"
+    ],
+    6
+   ],
+   "expected": {
+    "start": 4,
+    "end": 6
+   }
+  },
+  {
+   "name": "A5 escaped pipe is cell text, not a border",
+   "fn": "splitRow",
+   "args": [
+    "| a \\| b | c |"
+   ],
+   "expected": [
+    {
+     "text": "a \\| b",
+     "from": 1,
+     "to": 9,
+     "textFrom": 2,
+     "textTo": 8
+    },
+    {
+     "text": "c",
+     "from": 10,
+     "to": 13,
+     "textFrom": 11,
+     "textTo": 12
+    }
+   ]
+  },
+  {
+   "name": "A5 a dash line without a pipe is not a delimiter row",
+   "fn": "isDelimiterRow",
+   "args": [
+    "---"
+   ],
+   "expected": false
+  },
+  {
+   "name": "A5 delimiter row with colons and spaces",
+   "fn": "isDelimiterRow",
+   "args": [
+    "| :--- | :-: | --: |"
+   ],
+   "expected": true
+  },
+  {
+   "name": "A3 click on a cell puts the cursor at the end of its text",
+   "fn": "cellCursor",
+   "args": [
+    "| Tea | 3 |",
+    0
+   ],
+   "expected": 5
+  },
+  {
+   "name": "A3 click on the second cell",
+   "fn": "cellCursor",
+   "args": [
+    "| Tea | 3 |",
+    1
+   ],
+   "expected": 9
+  },
+  {
+   "name": "A3 click on an empty cell puts the cursor after the space",
+   "fn": "cellCursor",
+   "args": [
+    "| a |   |",
+    1
+   ],
+   "expected": 6
+  },
+  {
+   "name": "A3 a cell that the row does not have",
+   "fn": "cellCursor",
+   "args": [
+    "| a |",
+    3
+   ],
+   "expected": null
+  },
+  {
+   "name": "A8 align pads cells and keeps the alignment colons",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| Item | Price |",
+     "|:-|-:|",
+     "| Tea | 3 |",
+     "| Cake | 4.50 |"
+    ]
+   ],
+   "expected": [
+    "| Item | Price |",
+    "| :--- | ----: |",
+    "| Tea  |     3 |",
+    "| Cake |  4.50 |"
+   ]
+  },
+  {
+   "name": "A8 align centers a center column",
+   "fn": "alignTable",
+   "args": [
+    [
+     "|a|b|",
+     "|:-:|---|",
+     "|long text|x|"
+    ]
+   ],
+   "expected": [
+    "|     a     | b   |",
+    "| :-------: | --- |",
+    "| long text | x   |"
+   ]
+  },
+  {
+   "name": "A8 align fills a short row with empty cells",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| a | b |",
+     "|---|---|",
+     "| 1 |"
+    ]
+   ],
+   "expected": [
+    "| a   | b   |",
+    "| --- | --- |",
+    "| 1   |     |"
+   ]
+  },
+  {
+   "name": "A8 align keeps cells after the last column",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| a |",
+     "|---|",
+     "| 1 | extra |"
+    ]
+   ],
+   "expected": [
+    "| a   |",
+    "| --- |",
+    "| 1   | extra |"
+   ]
+  },
+  {
+   "name": "A8 align keeps escaped pipes",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| a |",
+     "|---|",
+     "| x \\| y |"
+    ]
+   ],
+   "expected": [
+    "| a      |",
+    "| ------ |",
+    "| x \\| y |"
+   ]
+  },
+  {
+   "name": "A8 align counts wide characters as two columns",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| 名前 | n |",
+     "|---|---|",
+     "| ab | 1 |"
+    ]
+   ],
+   "expected": [
+    "| 名前 | n   |",
+    "| ---- | --- |",
+    "| ab   | 1   |"
+   ]
+  },
+  {
+   "name": "A8 align keeps the indent of the header",
+   "fn": "alignTable",
+   "args": [
+    [
+     "  | a |",
+     "  |---|"
+    ]
+   ],
+   "expected": [
+    "  | a   |",
+    "  | --- |"
+   ]
+  },
+  {
+   "name": "A8 align does not change lines without a delimiter row",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| a |",
+     "| b |"
+    ]
+   ],
+   "expected": [
+    "| a |",
+    "| b |"
+   ]
+  },
+  {
+   "name": "A8 an aligned table stays the same",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| a   | b   |",
+     "| --- | --- |",
+     "| 1   | 2   |"
+    ]
+   ],
+   "expected": [
+    "| a   | b   |",
+    "| --- | --- |",
+    "| 1   | 2   |"
+   ]
+  },
+  {
+   "name": "A8 align counts an emoji and a ZWJ family as two columns",
+   "fn": "alignTable",
+   "args": [
+    [
+     "| ✅ | 👨‍👩‍👧 |",
+     "|---|---|",
+     "| ab | abcd |"
+    ]
+   ],
+   "expected": [
+    "| ✅  | 👨‍👩‍👧   |",
+    "| --- | ---- |",
+    "| ab  | abcd |"
+   ]
+  }
+ ]
+}

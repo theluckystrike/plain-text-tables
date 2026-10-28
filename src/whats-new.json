@@ -1,0 +1,25 @@
+{
+	"id": "plain-text-tables",
+	"name": "Plain Text Tables",
+	"version": "1.0.0",
+	"changes": [],
+	"tip": "Click a cell of a table in Live Preview to edit the table as Markdown text. Move the cursor out of the table and Obsidian draws it again.",
+	"thanks": "Hi, I am Michael, a solo developer in Poland. Plain Text Tables is one of over 100 small plugins that I make. Thank you for trusting it with your notes.",
+	"related": [
+		{
+			"id": "callout-table-footnotes",
+			"name": "Footnotes in Callouts and Tables",
+			"blurb": "Show footnote references in callouts and tables as numbered links."
+		},
+		{
+			"id": "table-row-links",
+			"name": "Table Row Links",
+			"blurb": "Copy links to marked rows of a Markdown table."
+		},
+		{
+			"id": "paragraph-enter",
+			"name": "Paragraph Enter",
+			"blurb": "Press Enter once to start a new paragraph."
+		}
+	]
+}
