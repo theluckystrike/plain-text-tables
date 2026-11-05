@@ -71,7 +71,7 @@ To sign in and enable Pro:
 2. In Obsidian, open the settings of Plain Text Tables and select "Sign in with GitHub".
 3. The plugin copies a code and opens github.com/login/device. Paste the code there and approve.
 
-If you sponsor after you sign in, select Refresh. A negative sponsorship answer turns Pro off.
+If you sponsor after you sign in, select Refresh.
 
 ## FAQ
 
@@ -98,6 +98,8 @@ Tap a cell to show the table text. The tests run in the mobile emulation of Obsi
 ## Payment, account and network
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
+
+[One payment turns on Pro in every NoteMods plugin](https://notemods.com/pro/).
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=plain-text-tables. You need no account for the free features. Pro needs the GitHub account that sponsors.
 
