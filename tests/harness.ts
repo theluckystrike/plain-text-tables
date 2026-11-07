@@ -148,3 +148,16 @@ export function drawnTables(view: EditorView): number {
 }
 
 export const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Waits in 20 ms steps until cond() is true and returns true, or returns false after deadlineMs. The deadline is far
+ * above the timer chain it waits for, so a slow CI runner (event loop lag up to about 21 times this Mac) still passes.
+ */
+export async function until(cond: () => boolean, deadlineMs = 10_000): Promise<boolean> {
+	const end = Date.now() + deadlineMs;
+	while (!cond()) {
+		if (Date.now() >= end) return false;
+		await wait(20);
+	}
+	return true;
+}

@@ -1,6 +1,6 @@
 {
 	"name": "plain-text-tables",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": true,
 	"description": "Shows a Markdown table as plain text in Live Preview while the cursor is in it, and renders it again when the cursor leaves.",
 	"main": "main.js",

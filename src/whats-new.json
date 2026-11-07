@@ -1,8 +1,10 @@
 {
 	"id": "plain-text-tables",
 	"name": "Plain Text Tables",
-	"version": "1.0.0",
-	"changes": [],
+	"version": "1.0.1",
+	"changes": [
+		"The Pro notice of Plain Text Tables now says that one payment turns on Pro in every NoteMods plugin."
+	],
 	"tip": "Click a cell of a table in Live Preview to edit the table as Markdown text. Move the cursor out of the table and Obsidian draws it again.",
 	"thanks": "Hi, I am Michael, a solo developer in Poland. Plain Text Tables is one of over 100 small plugins that I make. Thank you for trusting it with your notes.",
 	"related": [

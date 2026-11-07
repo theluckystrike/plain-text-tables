@@ -4,7 +4,7 @@ import type Plugin from '../../src/main';
 
 const DRAW_ALL = 'Align columns when you leave a table';
 const LEAD_DRAW_ALL = 'Align columns when you leave a table is a Pro feature.';
-const PITCH = 'Sponsor on GitHub, then sign in from the plugin settings.';
+const PITCH = 'One payment turns on Pro in every NoteMods plugin. Sponsor on GitHub, then sign in from the plugin settings.';
 
 interface Notice { text: string; buttons: number }
 interface Row { disabled: boolean; checked: boolean | null; value: string | null }
