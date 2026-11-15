@@ -1,5 +1,11 @@
 # plain-text-tables
 
+## 1.0.2
+
+### Patch Changes
+
+- The Sponsor button now opens the NoteMods one-time tier.
+
 ## 1.0.1
 
 ### Patch Changes

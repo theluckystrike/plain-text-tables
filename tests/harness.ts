@@ -7,6 +7,7 @@ import { EditorState, type Range, RangeSet, StateEffect, StateField, type Extens
 import { Decoration, type DecorationSet, EditorView, WidgetType } from '@codemirror/view';
 import { editorEditorField, editorInfoField, editorLivePreviewField } from 'obsidian';
 import { findTable } from '../src/tables';
+import { budget } from './time-scale';
 
 export const MATCH = 'obsidian-search-match-highlight';
 type Keep = (from: number, to: number, value: Decoration) => boolean;
@@ -154,7 +155,7 @@ export const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout
  * above the timer chain it waits for, so a slow CI runner (event loop lag up to about 21 times this Mac) still passes.
  */
 export async function until(cond: () => boolean, deadlineMs = 10_000): Promise<boolean> {
-	const end = Date.now() + deadlineMs;
+	const end = Date.now() + budget(deadlineMs);
 	while (!cond()) {
 		if (Date.now() >= end) return false;
 		await wait(20);

@@ -351,7 +351,8 @@ export function plainTextTables(opts: () => EditorOptions, onUnsupported: (drawn
 				const view = this.view;
 				if (!o.enabled || e.button !== 0 || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
 				if (!view.state.field(editorLivePreviewField, false)) return;
-				const target = e.target instanceof Element ? e.target : null;
+				const node = e.targetNode;
+				const target = node?.instanceOf(Element) ? node : null;
 				const cell = target?.closest('td, th');
 				const widget = target?.closest('.cm-table-widget');
 				if (!cell || !widget || !view.contentDOM.contains(widget)) return;

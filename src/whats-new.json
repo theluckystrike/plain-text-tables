@@ -1,7 +1,7 @@
 {
 	"id": "plain-text-tables",
 	"name": "Plain Text Tables",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"changes": [
 		"The Pro notice of Plain Text Tables now says that one payment turns on Pro in every NoteMods plugin."
 	],
